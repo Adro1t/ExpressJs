@@ -5,7 +5,7 @@ const db=require('./db/connection')
 const bodyParser=require('body-parser')
 const morgan=require('morgan')
 
-const CategoryRoute=require('./route/CategoryRoute')
+const CategoryRoute=require('./route/categoryRoute')
 
 const app = express()
 

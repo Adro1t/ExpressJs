@@ -15,3 +15,13 @@ exports.postCategory=(req,res)=>{
         res.json({category})
     })
 }
+
+
+exports.getAllCategory=(req,res)=>{
+    Category.find().exec((error,category)=>{
+        if(error || !category){
+            return res.status(400).json({error:"Category not found"})
+        }
+        res.json(category)
+    })
+}
