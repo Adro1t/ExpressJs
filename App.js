@@ -6,6 +6,7 @@ const bodyParser=require('body-parser')
 const morgan=require('morgan')
 
 const CategoryRoute=require('./route/categoryRoute')
+const ProductRoute=require('./route/productRoute')
 
 const app = express()
 
@@ -15,6 +16,7 @@ app.use(morgan('dev'))//for development purposes
 
 //route
 app.use('/api',CategoryRoute)
+app.use('/api',ProductRoute)
 
 const port = process.env.PORT || 5000
 

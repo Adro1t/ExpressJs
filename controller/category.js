@@ -45,12 +45,25 @@ exports.getsingleCategory = (req, res) => {
 
 
 //to delete category
-exports.deleteCategory=(req,res)=>{
-    const category=req.category
-    category.remove((error,result)=>{
-        if(error || !result){
-            return res.status(400).json({error:"Something went wrong"})
+exports.deleteCategory = (req, res) => {
+    const category = req.category
+    category.remove((error, result) => {
+        if (error || !result) {
+            return res.status(400).json({ error: "Something went wrong" })
         }
-        res.json({messsage:"Category deleted"})
+        res.json({ messsage: "Category deleted" })
+    })
+}
+
+
+//to update category
+exports.updateCategory = (req, res) => {
+    const category = req.category
+    category.category_name = req.body.category_name
+    category.save((error, category) => {
+        if (error || !category) {
+            return res.status(400).json({ error: "failed to update category" })
+        }
+        res.json({ category })
     })
 }
