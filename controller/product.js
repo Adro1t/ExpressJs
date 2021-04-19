@@ -1,3 +1,4 @@
+const { rawListeners } = require('../model/productModel')
 const Product = require('../model/productModel')
 
 exports.postProduct = (req, res) => {
@@ -51,5 +52,22 @@ exports.deleteProduct=(req,res)=>{
             return res.status(400).json({ error: "failed to delete product"})
         }
         res.json({messsage:"Product deleted"})
+    })
+}
+
+//to update product
+exports.updateProduct=(req, res)=>{
+    let product=req.product
+    product.product_name=req.body.product_name,
+    product.product_price=req.body.product_price,
+    product.product_quantity=req.body.product_quantity,
+    product.product_description=req.body.product_description,
+    product.category=req.body.category
+
+    product.save((error, result)=>{
+        if(error || !result){
+            return res.status(400).json({ error: "failed to update product"})
+        }
+        res.json({product})
     })
 }
