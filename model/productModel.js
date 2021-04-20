@@ -35,11 +35,18 @@ const productSchema = new mongoose.Schema({
         default: 0,
         max: 5
     },
-    
+
     sold_quantity: {
         type: Number,
         default: 0
+    },
+
+    product_image: {
+        type: String,
+        required: true
     }
+
+
 
 }, { timestamps: true })
 
