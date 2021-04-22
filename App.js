@@ -8,6 +8,7 @@ const expressValidator=require('express-validator')
 
 const CategoryRoute=require('./route/categoryRoute')
 const ProductRoute=require('./route/productRoute')
+const UserRoute=require('./route/userRoute')
 
 const app = express()
 
@@ -19,6 +20,8 @@ app.use(expressValidator())
 //route
 app.use('/api',CategoryRoute)
 app.use('/api',ProductRoute)
+app.use('/api',UserRoute)
+
 
 const port = process.env.PORT || 5000
 
