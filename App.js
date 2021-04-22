@@ -1,14 +1,15 @@
 
 const express = require('express')
 require('dotenv').config()
-const db=require('./db/connection')
-const bodyParser=require('body-parser')
-const morgan=require('morgan')
-const expressValidator=require('express-validator')
+const db = require('./db/connection')
+const bodyParser = require('body-parser')
+const morgan = require('morgan')
+const expressValidator = require('express-validator')
+const cookieParser = require('cookie-parser')
 
-const CategoryRoute=require('./route/categoryRoute')
-const ProductRoute=require('./route/productRoute')
-const UserRoute=require('./route/userRoute')
+const CategoryRoute = require('./route/categoryRoute')
+const ProductRoute = require('./route/productRoute')
+const UserRoute = require('./route/userRoute')
 
 const app = express()
 
@@ -16,11 +17,12 @@ const app = express()
 app.use(bodyParser.json())//to handle json data bodyParser is needed
 app.use(morgan('dev'))//for development purposes
 app.use(expressValidator())
+app.use(cookieParser())
 
 //route
-app.use('/api',CategoryRoute)
-app.use('/api',ProductRoute)
-app.use('/api',UserRoute)
+app.use('/api', CategoryRoute)
+app.use('/api', ProductRoute)
+app.use('/api', UserRoute)
 
 
 const port = process.env.PORT || 5000

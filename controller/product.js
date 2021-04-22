@@ -1,4 +1,3 @@
-const { rawListeners } = require('../model/productModel')
 const Product = require('../model/productModel')
 
 exports.postProduct = (req, res) => {
