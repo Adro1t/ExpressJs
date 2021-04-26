@@ -45,3 +45,34 @@ exports.signIn = (req, res) => {
 
     })
 }
+
+
+
+//for authorization
+exports.requireSignin = expressJwt({
+    secret: process.env.JWT_SECRET,
+    algorithms: ["HS256"],
+    userProperty: "auth",
+})
+
+//to get user by id
+exports.userById = (req, res, next, id) => {
+    User.findById(id).exec((error, user) => {
+        if (error || !user) {
+            return res.status(400).json({ error: "User not found" })
+        }
+        req.user = user
+        next()
+    })
+}
+
+//to show single user details
+exports.read = (req, res) => {
+    res.json(req.user)
+}
+
+//sign out
+exports.signOut = (req, res) => {
+    res.clearCookie('t')
+    res.json({ message: "Signed out successfully" })
+}
