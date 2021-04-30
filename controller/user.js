@@ -43,6 +43,78 @@ exports.postUser = (req, res) => {
     })
 }
 
+//confirm email after signup
+exports.postConfirmation = (req, res) => {
+    //at first find the matching token
+    Token.findOne({ token: req.params.token }, (error, token) => {
+        if (error || !token) {
+            return res.status(400).json({ error: "Invalid token or token may have expired" })
+        }
+
+        //if we find the valid token then find the valid user
+        User.findOne({ _id: token.userId }, (error, user) => {
+            if (error || !user) {
+                return res.status(400).json({ error: "We are unable to find the valid user for this token" })
+            }
+
+            //check if user is already verified or not
+            if (user.isVerified) {
+                return res.status(400).json({ error: "The email has already been verified , please login to continue" })
+            }
+
+            //save the verified user
+            user.isVerified = true
+            user.save((error) => {
+                if (error) {
+                    return res.status(400).json({ error: error })
+                }
+                res.json({ message: "Congrats, your account has been verified. Please login to continue." })
+
+            })
+        })
+
+    })
+}
+
+//resend verification token 
+exports.resendToken = (req, res) => {
+    // at first find the registered user
+    User.findOne({ email: req.body.email }, (error, user) => {
+        if (!user || error) {
+            return res.status(400).json({ error: "The email you provided not found in our system" })
+        }
+
+        if (user.isVerified) {
+            return res.status(400).json({ error: "The provided email is already verified" })
+        }
+
+        //now create a token save token to database and verification link
+        const token = new Token({
+            userId: user._id,
+            token: crypto.randomBytes(16).toString('hex')
+        })
+
+        token.save((error, result) => {
+            if (error || !result) {
+                return res.status(400).json({ error: error })
+            }
+
+            //send mail
+            sendEmail({
+                from: 'no reply@yourWebappilication.com',
+                to: user.email,
+                subject: 'Email Verification Link',
+                text: `Hello, \n\n Please Verify Your Account by clicking the link below \n http:\/\/${req.headers.host}\/api\/confirmation\/${token.token}`
+
+            })
+
+        })
+        res.json({ message: "Verification link has been sent to your email address." })
+    })
+
+}
+
+
 exports.signIn = (req, res) => {
     const { email, password } = req.body
 
