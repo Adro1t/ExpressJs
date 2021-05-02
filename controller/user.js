@@ -176,3 +176,66 @@ exports.signOut = (req, res) => {
     res.clearCookie('t')
     res.json({ message: "Signed out successfully" })
 }
+
+//forgot password
+exports.forgetPassword = (req, res) => {
+    User.findOne({ email: req.body.email }, (error, user) => {
+        if (error || !user) {
+            return res.status(400).json({ error: "Sorry the email you provided not found in our system , please try another" })
+        }
+
+        const token = new Token({
+            userId: user._id,
+            token: crypto.randomBytes(16).toString('hex')
+        })
+
+        token.save((error) => {
+            if (error) {
+                return res.status(400).json({ error: "Something went wrong" })
+            }
+
+            //send mail
+            sendEmail({
+                from: 'no reply@yourWebappilication.com',
+                to: user.email,
+                subject: 'Password Reset Link',
+                text: `Hello, \n\n Please Reser Your Password by clicking the link below \n http:\/\/${req.headers.host}\/api\/resetpassword\/${token.token}`
+
+            })
+
+        })
+        res.json({ message: "Password reset link has been sent" })
+    })
+}
+
+//reset password
+exports.passwordReset = (req, res) => {
+    //at first find the valid token
+    Token.findOne({ token: req.params.token }, (error, token) => {
+        if (error || !token) {
+            return res.status(400).json({ error: "Invalid token or token may have expired" })
+        }
+
+        //if token found , find the valid user
+        User.findOne({
+            _id: token.userId,
+            email: req.body.email
+
+        }, (error, user) => {
+
+            if (error || !user) {
+                return res.status(400).json({ error: "Sorry the email you provided is not associated with this token" })
+            }
+
+            //update password
+            user.password = req.body.password
+            user.save((error) => {
+                if (error) {
+                    return res.status(400).json({ error: "Failed to reset password" })
+                }
+            })
+
+            res.json({ message: "Password has been reset successfully" })
+        })
+    })
+}
