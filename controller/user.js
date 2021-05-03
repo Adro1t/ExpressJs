@@ -239,3 +239,20 @@ exports.passwordReset = (req, res) => {
         })
     })
 }
+
+//access only for authenticated user
+exports.isAuth = (req, res, next) => {
+    let user = req.user && req.auth && req.user._id === req.auth._id
+    if (!user) {
+        return res.status(400).json({ error: "Access denied" })
+    }
+    next()
+}
+
+//check if admin or not found
+exports.isAdmin = (req, res, next) => {
+    if (req.user.role === 0) {
+        return res.status(400).json({ error: "Access denied, this is a admin resource " })
+    }
+    next()
+}

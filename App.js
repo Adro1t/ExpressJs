@@ -10,6 +10,7 @@ const cookieParser = require('cookie-parser')
 const CategoryRoute = require('./route/categoryRoute')
 const ProductRoute = require('./route/productRoute')
 const UserRoute = require('./route/userRoute')
+const OrderRoute = require('./route/orderRoute')
 
 const app = express()
 
@@ -23,6 +24,7 @@ app.use(cookieParser())
 app.use('/api', CategoryRoute)
 app.use('/api', ProductRoute)
 app.use('/api', UserRoute)
+app.use('/api', OrderRoute)
 
 
 const port = process.env.PORT || 5000
