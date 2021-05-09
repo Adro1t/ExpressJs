@@ -6,6 +6,7 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const expressValidator = require('express-validator')
 const cookieParser = require('cookie-parser')
+const cors = require('cors')
 
 const CategoryRoute = require('./route/categoryRoute')
 const ProductRoute = require('./route/productRoute')
@@ -19,6 +20,8 @@ app.use(bodyParser.json())//to handle json data bodyParser is needed
 app.use(morgan('dev'))//for development purposes
 app.use(expressValidator())
 app.use(cookieParser())
+app.use(cors())
+
 
 //route
 app.use('/api', CategoryRoute)

@@ -1,8 +1,9 @@
 const express = require('express')
 const { postUser, signIn, userById, read, requireSignin, signOut, postConfirmation, resendToken, forgetPassword, passwordReset } = require('../controller/user')
+const { userValidation } = require('../validation')
 const router = express.Router()
 
-router.post('/postuser', postUser)
+router.post('/postuser', userValidation, postUser)
 router.post('/signin', signIn)
 router.param('userId', userById)
 router.get('/userinfo/:userId', requireSignin, read)
