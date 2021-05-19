@@ -21,6 +21,7 @@ app.use(morgan('dev'))//for development purposes
 app.use(expressValidator())
 app.use(cookieParser())
 app.use(cors())
+app.use('/public/uploads', express.static('public/uploads'));
 
 
 //route
